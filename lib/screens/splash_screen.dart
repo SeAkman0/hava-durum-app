@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import 'home_screen.dart';
+import 'city_selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -46,10 +49,29 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     // 2.5 saniye sonra ana ekrana geç
     Timer(const Duration(milliseconds: 2500), () {
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/check');
-      }
+      _checkAndNavigate();
     });
+  }
+
+  Future<void> _checkAndNavigate() async {
+    if (!mounted) return;
+    
+    final prefs = await SharedPreferences.getInstance();
+    final hasSelectedCity = prefs.containsKey('selected_city');
+
+    if (!mounted) return;
+
+    if (hasSelectedCity) {
+      // Kayıtlı şehir varsa HomeScreen'e git
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } else {
+      // İlk açılış, şehir seçim ekranına git
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const CitySelectionScreen()),
+      );
+    }
   }
 
   @override

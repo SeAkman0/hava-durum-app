@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/widget_background">
+
+    <!-- Üst Kısım: Şehir ve Navigasyon -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Sol Ok -->
+        <ImageButton
+            android:id="@+id/widget_prev_button"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_media_previous"
+            android:tint="#FFFFFF"
+            android:scaleType="fitCenter"
+            android:contentDescription="Önceki şehir" />
+
+        <!-- Şehir Adı -->
+        <TextView
+            android:id="@+id/widget_city_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="İstanbul"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <!-- Sağ Ok -->
+        <ImageButton
+            android:id="@+id/widget_next_button"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_media_next"
+            android:tint="#FFFFFF"
+            android:scaleType="fitCenter"
+            android:contentDescription="Sonraki şehir" />
+    </LinearLayout>
+
+    <!-- Orta Kısım: Sıcaklık ve Açıklama -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <!-- Sıcaklık -->
+        <TextView
+            android:id="@+id/widget_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25°"
+            android:textSize="32sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <!-- Açıklama -->
+        <TextView
+            android:id="@+id/widget_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Güneşli"
+            android:textSize="12sp"
+            android:textColor="#E0E0E0"
+            android:paddingStart="8dp"
+            android:paddingEnd="0dp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- Alt Kısım: Nem ve Rüzgar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Nem -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💧"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/widget_humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60%"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:paddingStart="4dp"
+                android:paddingEnd="0dp" />
+        </LinearLayout>
+
+        <!-- Rüzgar -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💨"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/widget_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12 km/s"
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:paddingStart="4dp"
+                android:paddingEnd="0dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- İndikator Noktalar -->
+    <LinearLayout
+        android:id="@+id/widget_indicator_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="6dp">
+        
+        <!-- Dinamik olarak indikator noktaları eklenecek -->
+        <TextView
+            android:id="@+id/widget_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="●"
+            android:textSize="8sp"
+            android:textColor="#80FFFFFF"
+            android:gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>

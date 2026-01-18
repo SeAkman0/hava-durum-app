@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/weather_provider.dart';
 import '../models/weather_data.dart';
+import '../services/widget_service.dart';
 import 'city_selection_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,7 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (_selectedCity != null && mounted) {
       // API sadece şehir adını destekler, ilçe UI için kullanılır
-      context.read<WeatherProvider>().fetchWeatherByCity(_selectedCity!);
+      await context.read<WeatherProvider>().fetchWeatherByCity(_selectedCity!);
+      
+      // Hava durumu yüklendikten sonra widget'ı güncelle
+      final provider = context.read<WeatherProvider>();
+      await _updateWidgetWithAllCities(provider);
     } else {
       print('⚠️ Kaydedilmiş şehir bulunamadı');
     }
@@ -62,7 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Hava durumunu güncelle (API sadece şehir adını kabul eder)
       if (mounted) {
-        context.read<WeatherProvider>().fetchWeatherByCity(city);
+        await context.read<WeatherProvider>().fetchWeatherByCity(city);
+        
+        // Widget'ı güncelle
+        final provider = context.read<WeatherProvider>();
+        await _updateWidgetWithAllCities(provider);
       }
     }
   }
@@ -151,8 +160,14 @@ class _HomeScreenState extends State<HomeScreen> {
               if (_selectedCity != null) {
                 // API sadece şehir adını kabul eder
                 await provider.fetchWeatherByCity(_selectedCity!);
+                
+                // Widget'ı güncelle
+                await _updateWidgetWithAllCities(provider);
               } else if (provider.currentCityName != null) {
                 await provider.fetchWeatherByCity(provider.currentCityName!);
+                
+                // Widget'ı güncelle
+                await _updateWidgetWithAllCities(provider);
               }
             },
             color: Colors.blue,
@@ -193,9 +208,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 // Ana hava durumu kartı
-                SliverToBoxAdapter(
-                  child: _buildMainWeatherCard(provider.currentWeather!),
-                ),
+                if (provider.currentWeather != null)
+                  SliverToBoxAdapter(
+                    child: _buildMainWeatherCard(provider.currentWeather!),
+                  ),
 
                 // 3 günlük tahmin
                 if (provider.currentForecast != null)
@@ -489,6 +505,9 @@ class _HomeScreenState extends State<HomeScreen> {
           
           // Hava durumunu güncelle
           await provider.fetchWeatherByCity(actualCity);
+          
+          // Widget'ı güncelle
+          await _updateWidgetWithAllCities(provider);
         }
       },
       onLongPress: () {
@@ -590,6 +609,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
       ),
+    );
+  }
+
+  // Widget'ı tüm şehirlerle güncelle
+  Future<void> _updateWidgetWithAllCities(WeatherProvider provider) async {
+    if (provider.savedCities.isEmpty) {
+      await WidgetService.clearWidget();
+      return;
+    }
+    
+    // Mevcut seçili şehrin index'ini bul
+    final currentCityKey = _selectedDistrict != null && _selectedDistrict!.isNotEmpty
+        ? '$_selectedDistrict, $_selectedCity'
+        : _selectedCity;
+    
+    int currentIndex = 0;
+    if (currentCityKey != null) {
+      final index = provider.savedCities.indexOf(currentCityKey);
+      if (index >= 0) {
+        currentIndex = index;
+      }
+    }
+    
+    // Tüm şehirlerin hava durumunu widget'a gönder
+    await WidgetService.updateWidgetWithMultipleCities(
+      provider.citiesWeather,
+      provider.savedCities,
+      currentIndex,
     );
   }
 

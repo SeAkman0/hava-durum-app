@@ -37,12 +37,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color(0xFF1C1C1E),
           fontFamily: 'SF Pro Display',
         ),
-        home: const SplashScreen(),
-        routes: {
-          '/check': (context) => const InitialScreen(),
-          '/home': (context) => const HomeScreen(),
-          '/city-selection': (context) => const CitySelectionScreen(),
-        },
+        home: const InitialScreen(),
       ),
     );
   }
